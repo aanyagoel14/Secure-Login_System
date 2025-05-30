@@ -6,8 +6,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
 
-    if ($password !== $confirm_password) {
-        die('Passwords do not match.'); }
+    // if ($password !== $confirm_password) {
+    //     die('Passwords do not match.'); }
 
     if (strlen($password) < 10) {
         die('Password must be at least 10 characters long.'); }
