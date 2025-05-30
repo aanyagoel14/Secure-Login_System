@@ -12,4 +12,12 @@ class User{
     return $rows;
     
   }
+
+  public function create_user($username, $password){
+  $db = db_connection();
+  $stmt = $db->prepare('INSERT into users... ');
+  $stmt->execute();
+  $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  return $rows;
+}
 }
