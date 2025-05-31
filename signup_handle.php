@@ -1,36 +1,55 @@
 <?php
+ob_start(); 
+session_start();
 require_once('database.php');
+require_once('user.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = trim($_POST['username']);
-    $password = $_POST['password'];
-    $confirm_password = $_POST['confirm_password'];
+    $username = trim($_POST['username'] ?? '');
+    $password = $_POST['password'] ?? '';
+    $confirm_password = $_POST['confirm_password'] ?? '';
+
+    // Validate inputs
+    if (empty($username) || empty($password) || empty($confirm_password)) {
+        $_SESSION['signup_error'] = "All fields are required";
+        header("Location: signup.php");
+        exit;
+    }
 
     if ($password !== $confirm_password) {
-        die('Passwords don\'t match.'); }
+        $_SESSION['signup_error'] = "Passwords do not match";
+        header("Location: signup.php");
+        exit;
+    }
 
-    if (strlen($password) < 10) {
-        die('Password must be at least 10 characters long.'); }
-    
+    // Replace the existing password validation with:
+    if (strlen($password) < 8) {
+        $_SESSION['signup_error'] = "Password must be at least 10 characters long";
+        header("Location: signup.php");
+        exit;
+    }
+
     try {
-        $db = db_connection();
+        $user = new User();
+        $existing_user = $user->find_by_username($username);
 
-        $stmt = $db->prepare("SELECT * FROM users WHERE username = :username");
-        $stmt->execute(['username' => $username]);
-        if ($stmt->rowCount() > 0) {
-            die('Username already exists. Please choose another.'); }
+        if ($existing_user) {
+            $_SESSION['signup_error'] = "Username already exists";
+            header("Location: signup.php");
+            exit;
+        }
 
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        $stmt = $db->prepare("INSERT INTO users (username, password) VALUES (:username, :password)");
-        $stmt->execute([
-            'username' => $username,
-            'password' => $hashed_password
-        ]);
-
-        echo 'Account created successfully. <a href="login.php">Login here</a>';
-
-    } catch (PDOException $e) {
-        echo 'Database error: ' . $e->getMessage();
+        if ($user->create_user($username, $password)) {
+            $_SESSION['signup_success'] = "Account created successfully! Please login.";
+            header("Location: login.php");
+            exit;
+        }
+    } catch (Exception $e) {
+        $_SESSION['signup_error'] = "Registration failed. Please try again.";
+        header("Location: signup.php");
+        exit;
     }
 }
-?>
+
+header("Location: signup.php");
+exit;
