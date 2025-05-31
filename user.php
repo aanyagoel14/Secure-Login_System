@@ -4,7 +4,7 @@ require_once('database.php');
 class User {
     public function get_all_users() {
         $db = db_connection();
-        $query = "SELECT ID, Username FROM users"; // Only select necessary fields
+        $query = "SELECT ID, Username FROM users";
         $stmt = $db->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

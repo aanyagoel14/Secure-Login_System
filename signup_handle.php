@@ -9,7 +9,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'] ?? '';
     $confirm_password = $_POST['confirm_password'] ?? '';
 
-    // Validate inputs
     if (empty($username) || empty($password) || empty($confirm_password)) {
         $_SESSION['signup_error'] = "All fields are required";
         header("Location: signup.php");
@@ -22,9 +21,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit;
     }
 
-    // Replace the existing password validation with:
     if (strlen($password) < 8) {
-        $_SESSION['signup_error'] = "Password must be at least 10 characters long";
+        $_SESSION['signup_error'] = "Password must be at least 8 characters long";
         header("Location: signup.php");
         exit;
     }
@@ -50,6 +48,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit;
     }
 }
-
 header("Location: signup.php");
 exit;

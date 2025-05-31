@@ -7,7 +7,7 @@ $user_list = $users->get_all_users();
 echo '<pre>';
 ?>
 
-<h2>Welcome to Our App</h2>
+<h2>Welcome to Our Login System!</h2>
 <ul>
   <li><a href="signup.php">Create an Account</a></li>
   <li><a href="login.php">Login</a></li>

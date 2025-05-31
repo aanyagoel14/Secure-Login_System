@@ -5,10 +5,6 @@ session_start();
 <html>
 <head>
   <title>Login</title>
-  <!-- <style>
-    .alert {}
-    .alert-error { background: #f8d7da; color: #721c24; }
-  </style> -->
 </head>
 <body>
   <?php if (isset($_SESSION['login_error'])): ?>
