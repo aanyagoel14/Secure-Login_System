@@ -5,7 +5,6 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
 }
-
 require_once('user.php');
 $user = new User();
 $current_user = $user->find_by_username($_SESSION['username']);
